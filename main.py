@@ -26,50 +26,12 @@ def main(config):
         raise ValueError("invalid value for 'mode': {}".format(config.mode))
 
 
-def get_ridof_blank(train_data_dict):
-    passage_for_train = []
-    queries_for_train = []
-    path_with_blank = '''/home/zhangs/RC/data/Repo_for_transfer/ans_train_text.txt'''
-    with open(path_with_blank, 'r') as span_file:
-        for i, span in enumerate(span_file):
-            if span != '\n':
-                para = train_data_dict['passages'][i]
-                passage_for_train.append(para)
-                queries_for_train.append(train_data_dict['queries'][i])
-    return passage_for_train, queries_for_train
-def do_get_phrase():
-    train_data_dict = read_metadata('''/home/zhangs/RC/data/train_v1.1.json''', 'train')
-    train_data_dict_backup = read_metadata('''/home/zhangs/RC/data/train_v1.1.json''', 'train')
-    passage_for_train, queries_for_train = get_ridof_blank(train_data_dict)
-    train_data_dict['passages'] = passage_for_train
-    train_data_dict['queries']  = queries_for_train
-    
-    path_ans_indics = '''/home/zhangs/RC/data/Repo_for_transfer/ans_train_nonblank_indics.json'''
-    path_span_test = '''/home/zhangs/RC/data/Repo_for_transfer/test.txt'''
-    list_extracted = []
-    with open(path_ans_indics, 'r') as span_file:
-        for line in span_file:
-            instance = json.loads(line)
-            for i,span in enumerate(instance):
-                para = train_data_dict['passages'][i]
-                try:
-                    list_extracted.append(get_phrase(para, Tokenize_without_sent(para), span))
-                except:
-                    print(i)
-                    print(para)
-                    print(span)
-                    return
-    with open(path_span_test, 'w') as ex_file:
-        for instance in list_extracted:
-            ex_file.write(instance+'\n')
+
 def _train(config):
-
-    train_data_dict = read_metadata('''/home/zhangs/RC/data/train_v1.1.json''', 'train')
-    passage_for_train, queries_for_train = get_ridof_blank(train_data_dict)
-    train_data_dict['passages'] = passage_for_train
-    train_data_dict['queries']  = queries_for_train
+    path = '''/home/zhangs/RC/SQUAD_data/train-v1.1.json'''
+	train_data_dict = read_metadata(path)
+	train_data_dict = renew_data_dict(train_data_dict)
     
-
 
     '''TODO: the char dict should also contain dev-set'''
     char2idx_dict, char_vocabulary_size = get_char2idx(train_data_dict)
@@ -78,7 +40,7 @@ def _train(config):
     word2idx_dict, emb_mat, vocabulary_size = get_word2idx_and_embmat('''/home/zhangs/RC/data/glove.6B.100d.txt''')
     
     train_data = DataSet(train_data_dict)
-    train_data.init_with_ans_file('''/home/zhangs/RC/data/Repo_for_transfer/ans_train_nonblank_indics.json''', config.batch_size, 'train')
+    train_data.init_without_ans_file(config.batch_size, 'train')
     
 
     config.emb_mat = emb_mat
@@ -100,7 +62,7 @@ def _train(config):
     global_step = 0
 
 
-    train_writer = tf.summary.FileWriter('/home/zhangs/RC/data/FINAL', sess.graph)
+    train_writer = tf.summary.FileWriter('/home/zhangs/RC/SQUAD_data/FINAL', sess.graph)
 
     init = tf.global_variables_initializer()
     sess.run(init)
@@ -140,8 +102,8 @@ def _train(config):
     
 
     '''start to evaluate via dev-set'''
-    dev_data_dict = read_metadata('''/home/zhangs/RC/data/dev_v1.1.json''', 'dev')
-    dev_data_dict_backup = read_metadata('''/home/zhangs/RC/data/dev_v1.1.json''', 'dev')
+    dev_data_dict = read_metadata('''/home/zhangs/RC/SQUAD_data/dev-v1.1.json''', 'dev')
+    dev_data_dict_backup = read_metadata('''/home/zhangs/RC/SQUAD_data/dev-v1.1.json''', 'dev')
     dev_data   = DataSet(dev_data_dict)
     dev_data.init_without_ans(config.batch_size, 'dev')
     ans_list = dev_data.answers_list
@@ -172,50 +134,10 @@ def _train(config):
                 print(words)
     
 
-    path_result = '''/home/zhangs/RC/data/out_train_dev/dev_out.txt'''
+    path_result = '''/home/zhangs/RC/SQUAD_data/out_first_time/dev_out.txt'''
     with open(path_result, 'w') as out_file:
         for summary in summaries:
             out_file.write(summary+'\n')
 
     
-    ## TODO apply the model to training data
-    train_data_dict = read_metadata('''/home/zhangs/RC/data/train_v1.1.json''', 'dev')
-    train_data_dict_backup = read_metadata('''/home/zhangs/RC/data/train_v1.1.json''', 'dev')
-    train_data = DataSet(train_data_dict)
-    train_data.init_without_ans(config.batch_size, 'dev')
-    train_batches = train_data.get_batch_list()
-
-    summaries = []
-
-    for j, batch in enumerate(train_batches):
-        feed_dict = model.get_feed_dict(batch, None, False)
-        yp, yp2 = sess.run([model.yp, model.yp2], feed_dict=feed_dict)   
-        yp = get_y_index(yp)
-        yp2= get_y_index(yp2)
-        for i in range(len(batch['x'])):
-            words = batch['x'][i]
-            try:
-                summary = get_phrase(train_data_dict_backup['passages'][j*config.batch_size+i], words, [yp[i], yp2[i]])
-                summaries.append(summary)  
-            except:
-                print(yp[i])
-                print(yp2[i])
-                print(words)
-
-    path_result = '''/home/zhangs/RC/data/out_train_dev/train_out.txt'''
-    with open(path_result, 'w') as out_file:
-        for summary in summaries:
-            out_file.write(summary+'\n')
-    # rouge_score = get_rougel_score_ave(summaries, dev_data_dict['answers'], 'f')
-
-    # summ = []
-    # for summary in summaries:
-    #     summ.append(Tokenize_string_word_level(summary))
-    # reference = []
-    # for ref in dev_data_dict['answers']:
-    #     reference.append([Tokenize_string_word_level(ref)])
-    # bleu_score = nltk.translate.bleu_score.corpus_bleu(reference, summ)
-    
-    # print(rouge_score)
-    # print(bleu_score)
             

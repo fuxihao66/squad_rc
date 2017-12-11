@@ -47,7 +47,7 @@ def renew_data_dict(train_data_dict):
 	train_data_dict['questions'] = renew_question_list  
 	return train_data_dict      
 if __name__ == '__main__':
-	path = '''/media/fuxihao/Data/MyDocuments/SQUAD_data/train-v1.1.json'''
+	path = '''/home/zhangs/RC/SQUAD_data/train-v1.1.json'''
 	train_data_dict = read_metadata(path)
 	train_data_dict = renew_data_dict(train_data_dict)
 	print(len(train_data_dict['ans_indics']))
