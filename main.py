@@ -40,7 +40,7 @@ def _train(config):
 	word2idx_dict, emb_mat, vocabulary_size = get_word2idx_and_embmat('''/home/zhangs/RC/data/glove.6B.100d.txt''')
     
 	train_data = DataSet(train_data_dict)
-	train_data.init_without_ans_file(config.batch_size, 'train')
+	train_data.init_without_ans(config.batch_size, 'train')
     
 	config.emb_mat = emb_mat
 	config.word_vocab_size = vocabulary_size
