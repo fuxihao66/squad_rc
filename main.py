@@ -42,9 +42,8 @@ def _train(config):
 	train_data = DataSet(train_data_dict)
 	train_data.init_without_ans_file(config.batch_size, 'train')
     
-
 	config.emb_mat = emb_mat
-    config.word_vocab_size = vocabulary_size
+	config.word_vocab_size = vocabulary_size
 	config.char_vocab_size = char_vocabulary_size
 
 	with tf.name_scope("model"):
