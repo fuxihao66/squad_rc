@@ -118,18 +118,18 @@ def get_highest_rl_span(para, reference, max_gap):
     # except:
     #     print(substring)
     #     print(para)
-def get_indics(para_list, ans_list):
-    indics_list = []
-    fucking_indics = []
-    for i, para in enumerate(para_list):
-        tokenized_para = Tokenize_string_word_level(para)
-        tokenized_ans = Tokenize_string_word_level(ans_list[i])
-        index_start, index_stop = get_idx_sublist(tokenized_para, tokenized_ans)
-        if index_start == -1:
-            fucking_indics.append(i)
-        else:   
-            indics_list.append([index_start, index_stop])
-    return indics_list, fucking_indics
+# def get_indics(para_list, ans_list):
+#     indics_list = []
+#     fucking_indics = []
+#     for i, para in enumerate(para_list):
+#         tokenized_para = Tokenize_string_word_level(para)
+#         tokenized_ans = Tokenize_string_word_level(ans_list[i])
+#         index_start, index_stop = get_idx_sublist(tokenized_para, tokenized_ans)
+#         if index_start == -1:
+#             fucking_indics.append(i)
+#         else:   
+#             indics_list.append([index_start, index_stop])
+#     return indics_list, fucking_indics
 def get_selected_span(para, selected_span):
     
     substring = Tokenize_string_word_level(selected_span)

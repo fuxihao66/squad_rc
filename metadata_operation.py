@@ -113,7 +113,18 @@ def process_tokens(temp_tokens):
             elif len(item) > 0:
                 tokens.append(item)
     return tokens
-
+def get_indics(para_list, ans_list):
+    indics_list = []
+    fucking_indics = []
+    for i, para in enumerate(para_list):
+        tokenized_para = Tokenize_string_word_level(para)
+        tokenized_ans = Tokenize_string_word_level(ans_list[i])
+        index_start, index_stop = get_idx_sublist(tokenized_para, tokenized_ans)
+        if index_start == -1:
+            fucking_indics.append(i)
+        else:   
+            indics_list.append([index_start, index_stop])
+    return indics_list, fucking_indics
 ## the case of words should be taken into consideration
 def get_word2idx_and_embmat(path_to_file):
     word2vec_dict = {}
