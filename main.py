@@ -66,9 +66,9 @@ def _train(config):
 	init = tf.global_variables_initializer()
 	sess.run(init)
 
-    batch_list = train_data.get_batch_list()
-    batch_list_length = len(batch_list)
-    batch_num = 5
+	batch_list = train_data.get_batch_list()
+	batch_list_length = len(batch_list)
+	batch_num = 5
 
 
 	for i in range(config.num_epochs):
