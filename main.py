@@ -28,7 +28,7 @@ def main(config):
 
 
 def _train(config):
-    path = '''/home/zhangs/RC/SQUAD_data/train-v1.1.json'''
+	path = '''/home/zhangs/RC/SQUAD_data/train-v1.1.json'''
 	train_data_dict = read_metadata(path)
 	train_data_dict = renew_data_dict(train_data_dict)
     
@@ -39,8 +39,8 @@ def _train(config):
 
     word2idx_dict, emb_mat, vocabulary_size = get_word2idx_and_embmat('''/home/zhangs/RC/data/glove.6B.100d.txt''')
     
-    train_data = DataSet(train_data_dict)
-    train_data.init_without_ans_file(config.batch_size, 'train')
+	train_data = DataSet(train_data_dict)
+	train_data.init_without_ans_file(config.batch_size, 'train')
     
 
     config.emb_mat = emb_mat
