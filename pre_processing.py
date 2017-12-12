@@ -18,8 +18,6 @@ class DataSet:
     def __init__(self, data_dict):
         
         self.data = data_dict
-        self.data['ans_indics'] = []
-        # self.temp = []
         self.num_examples = len(data_dict['passages'])
         self.batches = []
 
@@ -92,68 +90,6 @@ class DataSet:
                 for question in self.data[key]:
                     cqi = [list(qij) for qij in question]
                     self.data['char_q'].append(cqi)
-    
-    def operate_answers_single_thread(self, start, end, thread_idx):
-        temp = []
-        
-        try:
-            for i in range(end)[start:]:
-                try:
-                    para = self.data['passages'][i]         
-                    # ans  = del_signal(self.data['answers'][i])
-                    ans = self.data['answers'][i]
-                except:
-                    print('index error')
-
-                try:
-                    l, flag = get_highest_rl_span(para, ans, 30)
-                    if  flag == False:
-                        l = get_selected_span(para, self.data['passage_selected'][i][0])
-                except:
-                    print('get span error')
-                    # l looks like: [j,j2]
-  
-                temp.append(l)
-        except:
-            print('error in a process')
-
-        path = '''/home/zhangs/RC/data/ans_train{}.json'''.format(thread_idx)
-        write_to_file(path, temp)
-
-        print('this process exited successfully')
-        print((start, end))
-        
-    def operate_answers(self, num_threads):
-
-        # def del_signal(sentence):
-        #     token_sent = Tokenize_string_word_level(sentence)
-        #     flag = 0
-        #     for word in word_dict:
-        #         if token_sent[0] in (word, word.lower(), word.capitalize(), word.upper()):
-        #             flag = 1
-        #             break
-        #     if flag == 0:
-        #         sentence[0] = sentence[0].lower()
-        #     return sentence[:len(sentence)-1]
-        
-        each_size = int(math.floor(self.num_examples/(num_threads-1))) 
-        thread_list = []
-        # q = Queue()
-
-        for thread_idx in tqdm(range(num_threads)):
-            # self.temp.append([])
-            if thread_idx == (num_threads-1):
-                thread_list.append(Process(target=self.operate_answers_single_thread, args=(thread_idx*each_size,len(self.data['passages']),thread_idx,)))
-            else:
-                thread_list.append(Process(target=self.operate_answers_single_thread, args=(thread_idx*each_size, (thread_idx+1)*each_size, thread_idx,)))
-
-
-        for thr in thread_list:
-            print('thread start')
-            thr.start()
-        for thr in thread_list:
-            thr.join()
-
           
     def write_answers_to_file(self, path):
         with open(path, 'w', encoding='utf8') as data_file:
