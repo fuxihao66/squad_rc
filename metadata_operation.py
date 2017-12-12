@@ -149,7 +149,7 @@ def get_char2idx(data_dict):
     char2idx_dict = {}
     i = 0
     for key in data_dict:
-        if key == 'passages' or key == 'queries':
+        if key == 'passages' or key == 'questions':
             for string in data_dict[key]:
                 for char in string:
                     if char not in char2idx_dict:

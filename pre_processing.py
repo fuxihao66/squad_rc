@@ -18,7 +18,7 @@ class DataSet:
     def __init__(self, data_dict):
         
         self.data = data_dict
-        self.data['ans_start_stop_idx'] = []
+        self.data['ans_indics'] = []
         # self.temp = []
         self.num_examples = len(data_dict['passages'])
         self.batches = []
@@ -33,14 +33,14 @@ class DataSet:
                 if (i+1)*batch_size <= self.num_examples:
                     batch['x']   = self.data['passages'][i*batch_size:(i+1)*batch_size]
                     batch['cx']  = self.data['char_x'][i*batch_size:(i+1)*batch_size]
-                    batch['y']   = self.data['ans_start_stop_idx'][i*batch_size:(i+1)*batch_size]
-                    batch['q']   = self.data['queries'][i*batch_size:(i+1)*batch_size]
+                    batch['y']   = self.data['ans_indics'][i*batch_size:(i+1)*batch_size]
+                    batch['q']   = self.data['questions'][i*batch_size:(i+1)*batch_size]
                     batch['cq']  = self.data['char_q'][i*batch_size:(i+1)*batch_size]
                 else :
                     batch['x']   = self.data['passages'][i*batch_size:self.num_examples]
                     batch['cx']  = self.data['char_x'][i*batch_size:self.num_examples]
-                    batch['y']   = self.data['ans_start_stop_idx'][i*batch_size:self.num_examples]
-                    batch['q']   = self.data['queries'][i*batch_size:self.num_examples]
+                    batch['y']   = self.data['ans_indics'][i*batch_size:self.num_examples]
+                    batch['q']   = self.data['questions'][i*batch_size:self.num_examples]
                     batch['cq']  = self.data['char_q'][i*batch_size:self.num_examples]
                 
                 # if i != 11:
@@ -57,15 +57,15 @@ class DataSet:
                 if (i+1)*batch_size <= self.num_examples:
                     batch['x']   = self.data['passages'][i*batch_size:(i+1)*batch_size]
                     batch['cx']  = self.data['char_x'][i*batch_size:(i+1)*batch_size]
-                    batch['y']   = self.data['ans_start_stop_idx'][i*batch_size:(i+1)*batch_size]
-                    batch['q']   = self.data['queries'][i*batch_size:(i+1)*batch_size]
+                    batch['y']   = self.data['ans_indics'][i*batch_size:(i+1)*batch_size]
+                    batch['q']   = self.data['questions'][i*batch_size:(i+1)*batch_size]
                     batch['cq']  = self.data['char_q'][i*batch_size:(i+1)*batch_size]
                     answer       = self.data['answers'][i*batch_size:(i+1)*batch_size]
                 else :
                     batch['x']   = self.data['passages'][i*batch_size:self.num_examples]
                     batch['cx']  = self.data['char_x'][i*batch_size:self.num_examples]
-                    batch['y']   = self.data['ans_start_stop_idx'][i*batch_size:self.num_examples]
-                    batch['q']   = self.data['queries'][i*batch_size:self.num_examples]
+                    batch['y']   = self.data['ans_indics'][i*batch_size:self.num_examples]
+                    batch['q']   = self.data['questions'][i*batch_size:self.num_examples]
                     batch['cq']  = self.data['char_q'][i*batch_size:self.num_examples]
                     answer       = self.data['answers'][i*batch_size:self.num_examples]
                 self.answers_list.append(answer)
@@ -87,7 +87,7 @@ class DataSet:
                 for passage in self.data[key]:
                     cxi = [list(xij) for xij in passage]
                     self.data['char_x'].append(cxi)
-            elif key == 'queries':
+            elif key == 'questions':
                 self.data[key] = Tokenize_without_sent(self.data[key])
                 for question in self.data[key]:
                     cqi = [list(qij) for qij in question]
@@ -157,13 +157,13 @@ class DataSet:
           
     def write_answers_to_file(self, path):
         with open(path, 'w', encoding='utf8') as data_file:
-            data_file.write(json.dumps(self.data['ans_start_stop_idx']))
+            data_file.write(json.dumps(self.data['ans_indics']))
         
     def read_operated_answers_from_file(self, path):
         with open(path, 'r', encoding='utf8') as data_file:
             for line in tqdm(data_file):
                 instance = json.loads(line)
-                self.data['ans_start_stop_idx'] = instance
+                self.data['ans_indics'] = instance
 
     def init_with_ans_file(self, path_to_answers, batch_size, set_type):
         self.read_operated_answers_from_file(path_to_answers)
