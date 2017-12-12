@@ -8,8 +8,8 @@ from tqdm import tqdm
 from rouge import Rouge
 import numpy as np
 import random
-from rouge_operation import *
-from pre_processing import *
+
+
 def read_metadata(file_to_read):
     passage_list     =  []
     answers_list     =  []
@@ -208,4 +208,19 @@ def get_y_index(y_after_softmax):
         y_indics.append(word_index)
     return y_indics
 
-  
+def get_idx_sublist(li, subli):
+    for idx_li in range(len(li)):
+        flag = 1
+        if idx_li+len(subli) > len(li):
+            return -1, -1
+        for idx_subli in range(len(subli)):
+
+            if subli[idx_subli] != li[idx_li+idx_subli]:
+                flag = 0
+                break
+
+        if flag == 1:
+            return idx_li, idx_li+len(subli)-1
+        else:
+            continue
+    return -1, -1  
