@@ -36,7 +36,7 @@ def _train(config):
 	'''TODO: the char dict should also contain dev-set'''
 	char2idx_dict, char_vocabulary_size = get_char2idx(train_data_dict)
     
-	path_vocab = ''''''
+	path_vocab = '''/home/zhangs/RC/squad_rc/vocabulary.txt'''
 	word2idx_dict, emb_mat = get_word2idx_and_embmat('''/home/zhangs/RC/data/glove.6B.100d.txt''', path_vocab)
     
 	train_data = DataSet(train_data_dict)
