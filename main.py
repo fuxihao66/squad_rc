@@ -70,35 +70,35 @@ def _train(config):
 	batch_num = 5
 
 
-	for i in range(config.num_epochs):
+	# for i in range(config.num_epochs):
 
-		for i in range(int(math.ceil(batch_list_length/batch_num))):
-        # for i in range(int(math.ceil(batch_list_length/config.num_gpus))):
-			sub_batch_list = get_random_eles_from_list(batch_list, batch_num)
-            # sub_batch_list = get_random_eles_from_list(batch_list, config.num_gpus)
+	# 	for i in range(int(math.ceil(batch_list_length/batch_num))):
+    #     # for i in range(int(math.ceil(batch_list_length/config.num_gpus))):
+	# 		sub_batch_list = get_random_eles_from_list(batch_list, batch_num)
+    #         # sub_batch_list = get_random_eles_from_list(batch_list, config.num_gpus)
 
-            # global_step = sess.run(models[0].global_step) + 1
-            # print(global_step)
-            # if global_step == 10000:
-            #     trainer.change_lr(0.3)
-            # loss, summary, train_op = trainer.step(sess, sub_batch_list, True)
-            # train_writer.add_summary(summary, global_step)
-            # print(loss)
+    #         # global_step = sess.run(models[0].global_step) + 1
+    #         # print(global_step)
+    #         # if global_step == 10000:
+    #         #     trainer.change_lr(0.3)
+    #         # loss, summary, train_op = trainer.step(sess, sub_batch_list, True)
+    #         # train_writer.add_summary(summary, global_step)
+    #         # print(loss)
 
-			for batch in sub_batch_list:
-				global_step = sess.run(model.global_step) + 1  # +1 because all calculations are done after step
-				get_summary = True
-				print(global_step)
+	# 		for batch in sub_batch_list:
+	# 			global_step = sess.run(model.global_step) + 1  # +1 because all calculations are done after step
+	# 			get_summary = True
+	# 			print(global_step)
 
-				if global_step == 5000:
-					trainer.change_lr(0.05)
-				if global_step == 10000:
-					trainer.change_lr(0.01)
+	# 			if global_step == 5000:
+	# 				trainer.change_lr(0.05)
+	# 			if global_step == 10000:
+	# 				trainer.change_lr(0.01)
 
-				loss, summary, train_op = trainer.step(sess, batch, get_summary=get_summary)
-				train_writer.add_summary(summary, global_step)
+	# 			loss, summary, train_op = trainer.step(sess, batch, get_summary=get_summary)
+	# 			train_writer.add_summary(summary, global_step)
 
-				print(loss)
+	# 			print(loss)
 
 
 	'''start to evaluate via dev-set'''
@@ -116,14 +116,9 @@ def _train(config):
 		yp = get_y_index(yp)
 		yp2= get_y_index(yp2)
 		for i in range(len(batch['x'])):
-            
-            # print(dev_data_dict_backup['passages'][j*config.batch_size+i])
-            
+                        
 			words = batch['x'][i]
-			# wo = wordss[yp[i][0]:yp2[i][0]+1]
-			# wo[0] = wo[0][yp[i][1]:]
-			# wo[len(wo)-1] = wo[len(wo)-1][:yp2[i][1]+1]
-			# print(wo)
+
 			try:
 				summary = get_phrase(dev_data_dict_backup['passages'][j*config.batch_size+i], words, [yp[i], yp2[i]])
 				summaries.append(summary)  
