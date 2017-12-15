@@ -35,7 +35,7 @@ flags.DEFINE_bool("eval", True, "eval? [True]")
 flags.DEFINE_integer("batch_size", 64, "Batch size [45]")
 flags.DEFINE_integer("val_num_batches", 100, "validation num batches [100]")
 flags.DEFINE_integer("test_num_batches", 0, "test num batches [0]")
-flags.DEFINE_integer("num_epochs", 12, "Total number of epochs for training [12]")
+flags.DEFINE_integer("num_epochs", 1, "Total number of epochs for training [12]")
 flags.DEFINE_integer("num_steps", 20000, "Number of steps [20000]")
 flags.DEFINE_integer("load_step", 0, "load step [0]")
 flags.DEFINE_float("init_lr", 0.8, "Initial learning rate [0.5]")
@@ -106,7 +106,7 @@ flags.DEFINE_bool("supervised", True, "whether the feed dict contain y")
 flags.DEFINE_integer("max_sent_size", 500, "the max number of words in a sentence")
 flags.DEFINE_integer("max_ques_size", 30, "the max number of words in a question")
 flags.DEFINE_integer("max_word_size", 20, "the max size of a word")
-
+flags.DEFINE_integer("word_vocab_size", 100000, "vocab word size")
 
 def main(_):
     config = flags.FLAGS

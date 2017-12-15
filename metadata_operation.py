@@ -126,24 +126,32 @@ def get_indics(para_list, ans_list):
             indics_list.append([index_start, index_stop])
     return indics_list, fucking_indics
 ## the case of words should be taken into consideration
-def get_word2idx_and_embmat(path_to_file):
-    word2vec_dict = {}
+def get_word2idx_and_embmat(path_to_file, path_vocab):
+    vocab_list = []
+    with open(path_vocab, 'r') as vocab_file:
+        for word in vocab_file:
+            vocab_list.append(word[:word.index('\n')])        
+    
     word2idx_dict = {}
-    i = 0
+    for i, word in enumerate(vocab_list):
+        word2idx_dict[word] = i
+
+    word2vec_dict = {}
     with open(path_to_file, 'r') as vec_file:
         for line in tqdm(vec_file):
             list_of_line = line.split(' ')
             word2vec_dict[list_of_line[0]] = list(map(float, list_of_line[1:]))
-            i += 1
-            word2idx_dict[list_of_line[0]] = i
     emb_mat = []
-    emb_mat.append([0 for i in range(100)])
-    for key in word2vec_dict:
-        emb_mat.append(word2vec_dict[key])
+    for i, word in enumerate(vocab_list):
+        if word not in word2vec_dict:
+            emb_mat.append([0 for i in range(100)])
+        else:
+            emb_mat.append(word2vec_dict[word])
+
     emb_mat = np.asarray(emb_mat)
     emb_mat = emb_mat.astype(dtype='float32')
-    vacabulary_size = i
-    return word2idx_dict, emb_mat, vacabulary_size
+    
+    return word2idx_dict, emb_mat
 
 def get_char2idx(data_dict):
     char2idx_dict = {}

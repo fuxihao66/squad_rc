@@ -110,10 +110,13 @@ class Model:
                     xx = tf.reshape(xx, [-1, JX, dco])
                     qq = tf.reshape(qq, [-1, JQ, dco])
 
+                    
+            with tf.variable_scope("emb_word"), tf.device("/cpu:0"):
+                word_emb_mat = tf.get_variable("word_emb_mat", shape=[VW, dw], dtype='float', initializer=self.emb_mat)
         
             with tf.name_scope("word"):
-                Ax = tf.nn.embedding_lookup(self.emb_mat, self.x)  # [N, M, JX, d]
-                Aq = tf.nn.embedding_lookup(self.emb_mat, self.q)  # [N, JQ, d]
+                Ax = tf.nn.embedding_lookup(word_emb_mat, self.x)  # [N, M, JX, d]
+                Aq = tf.nn.embedding_lookup(word_emb_mat, self.q)  # [N, JQ, d]
                 self.tensor_dict['x'] = Ax
                 self.tensor_dict['q'] = Aq
             if config.use_char_emb:

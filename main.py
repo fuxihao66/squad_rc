@@ -36,14 +36,13 @@ def _train(config):
 	'''TODO: the char dict should also contain dev-set'''
 	char2idx_dict, char_vocabulary_size = get_char2idx(train_data_dict)
     
-
-	word2idx_dict, emb_mat, vocabulary_size = get_word2idx_and_embmat('''/home/zhangs/RC/data/glove.6B.100d.txt''')
+	path_vocab = ''''''
+	word2idx_dict, emb_mat = get_word2idx_and_embmat('''/home/zhangs/RC/data/glove.6B.100d.txt''', path_vocab)
     
 	train_data = DataSet(train_data_dict)
 	train_data.init_without_ans(config.batch_size, 'train')
     
 	config.emb_mat = emb_mat
-	config.word_vocab_size = vocabulary_size
 	config.char_vocab_size = char_vocabulary_size
 
 	with tf.name_scope("model"):
@@ -91,8 +90,10 @@ def _train(config):
 				get_summary = True
 				print(global_step)
 
-				if global_step == 12000:
-					trainer.change_lr(0.3)
+				if global_step == 5000:
+					trainer.change_lr(0.05)
+				if global_step == 10000:
+					trainer.change_lr(0.01)
 
 				loss, summary, train_op = trainer.step(sess, batch, get_summary=get_summary)
 				train_writer.add_summary(summary, global_step)
@@ -101,11 +102,11 @@ def _train(config):
 
 
 	'''start to evaluate via dev-set'''
-	dev_data_dict = read_metadata('''/home/zhangs/RC/SQUAD_data/dev-v1.1.json''', 'dev')
-	dev_data_dict_backup = read_metadata('''/home/zhangs/RC/SQUAD_data/dev-v1.1.json''', 'dev')
+	dev_data_dict = read_metadata('''/home/zhangs/RC/SQUAD_data/dev-v1.1.json''')
+	dev_data_dict_backup = read_metadata('''/home/zhangs/RC/SQUAD_data/dev-v1.1.json''')
 	dev_data   = DataSet(dev_data_dict)
 	dev_data.init_without_ans(config.batch_size, 'dev')
-	ans_list = dev_data.answers_list
+	# ans_list = dev_data.answers_list
 	dev_batches = dev_data.get_batch_list()
 
 	summaries = []
