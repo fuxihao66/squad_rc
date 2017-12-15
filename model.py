@@ -112,7 +112,7 @@ class Model:
 
                     
             with tf.variable_scope("emb_word"), tf.device("/cpu:0"):
-                word_emb_mat = tf.get_variable("word_emb_mat", shape=[VW, dw], dtype='float', initializer=self.emb_mat)
+                word_emb_mat = tf.get_variable("word_emb_mat", dtype='float', initializer=self.emb_mat)
         
             with tf.name_scope("word"):
                 Ax = tf.nn.embedding_lookup(word_emb_mat, self.x)  # [N, M, JX, d]
