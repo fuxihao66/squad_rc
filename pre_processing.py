@@ -55,14 +55,14 @@ class DataSet:
                 if (i+1)*batch_size <= self.num_examples:
                     batch['x']   = self.data['passages'][i*batch_size:(i+1)*batch_size]
                     batch['cx']  = self.data['char_x'][i*batch_size:(i+1)*batch_size]
-                    batch['y']   = self.data['ans_indics'][i*batch_size:(i+1)*batch_size]
+                    # batch['y']   = self.data['ans_indics'][i*batch_size:(i+1)*batch_size]
                     batch['q']   = self.data['questions'][i*batch_size:(i+1)*batch_size]
                     batch['cq']  = self.data['char_q'][i*batch_size:(i+1)*batch_size]
                     answer       = self.data['answers'][i*batch_size:(i+1)*batch_size]
                 else :
                     batch['x']   = self.data['passages'][i*batch_size:self.num_examples]
                     batch['cx']  = self.data['char_x'][i*batch_size:self.num_examples]
-                    batch['y']   = self.data['ans_indics'][i*batch_size:self.num_examples]
+                    # batch['y']   = self.data['ans_indics'][i*batch_size:self.num_examples]
                     batch['q']   = self.data['questions'][i*batch_size:self.num_examples]
                     batch['cq']  = self.data['char_q'][i*batch_size:self.num_examples]
                     answer       = self.data['answers'][i*batch_size:self.num_examples]
