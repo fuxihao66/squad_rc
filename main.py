@@ -111,7 +111,7 @@ def _train(config):
 
 	summaries = []
 	for j, batch in enumerate(dev_batches):
-		feed_dict = model.get_feed_dict(batch, None, False)
+		feed_dict = model.get_feed_dict(batch, None, None, False)
 		yp, yp2 = sess.run([model.yp, model.yp2], feed_dict=feed_dict)   
 		yp = get_y_index(yp)
 		yp2= get_y_index(yp2)
