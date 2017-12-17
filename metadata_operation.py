@@ -23,7 +23,8 @@ def read_metadata(file_to_read):
             for i, instance in enumerate(instances):
                 for para in instance['paragraphs']:
                     for i,qas in enumerate(para['qas']):
-                        passage_list.append(para['context'])
+                        passage = para['context'].replace("''", '"').replace("``", '"')
+                        passage_list.append(passage)
                         answers_list.append(qas['answers'][0]['text'])
                         query_list.append(qas['question'])
                         query_id_list.append(qas['id'])

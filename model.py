@@ -300,7 +300,7 @@ class Model:
         feed_dict[self.learning_rate] = lr
         X = batch['x']
         CX = batch['cx']
-
+        
         if supervised:
             y = np.zeros([N, JX], dtype='bool')
             y2 = np.zeros([N, JX], dtype='bool')
