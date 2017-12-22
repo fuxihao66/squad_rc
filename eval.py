@@ -74,6 +74,8 @@ def metric_max_over_ground_truths(metric_fn, prediction, ground_truths):
 
 #     return {'exact_match': exact_match, 'f1': f1}
 def get_point(prediction, ground_truths):
+    f1 = exact_match = 0
+    total = 10570
     exact_match += metric_max_over_ground_truths(
                     exact_match_score, prediction, ground_truths)
     f1 += metric_max_over_ground_truths(
