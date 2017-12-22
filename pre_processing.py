@@ -115,13 +115,15 @@ if __name__ == '__main__':
     path_dev    = '''/home/zhangs/RC/SQUAD_data/dev-v1.1.json'''
     dev_data = read_metadata(path_dev)
     refer_ans = dev_data['answers']
+    passage = dev_data['passages']
     pred_ans = []
     with open(path_result, 'r') as result_file:
         for i,line in enumerate(result_file):
             pred = line[:line.index('\n')]
             pred_ans.append(pred)
 
-    # print(len(pred_ans))
-    # print(len(refer_ans))
+    print(len(passage))
+    print(len(pred_ans))
+    print(len(refer_ans))
 
     
