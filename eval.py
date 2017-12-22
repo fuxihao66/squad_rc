@@ -75,7 +75,7 @@ def metric_max_over_ground_truths(metric_fn, prediction, ground_truths):
 #     return {'exact_match': exact_match, 'f1': f1}
 def get_point(prediction, ground_truths):
     f1 = exact_match = 0
-    total = 10570
+    total = 100
     exact_match += metric_max_over_ground_truths(
                     exact_match_score, prediction, ground_truths)
     f1 += metric_max_over_ground_truths(
@@ -111,7 +111,8 @@ if __name__ == '__main__':
         for i,line in enumerate(result_file):
             pred = line[:line.index('\n')]
             pred_ans.append(pred)
-    pred_ans = pred_ans[:10570]
+    pred_ans = pred_ans[:100]
+    refer_ans = refer_ans[:100]
     [exact, f1] = get_point(pred, refer_ans)
     print(exact)
     print(f1)
