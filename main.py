@@ -128,7 +128,7 @@ def _train(config):
 				print(dev_data_dict_backup['passages'][j*config.batch_size+i])
 				print(words)
     
-
+	print(len(summaries))
 	path_result = '''/home/zhangs/RC/SQUAD_data/out_first_time/dev_out.txt'''
 	with open(path_result, 'w') as out_file:
 		for summary in summaries:
