@@ -50,44 +50,63 @@ def metric_max_over_ground_truths(metric_fn, prediction, ground_truths):
     return max(scores_for_ground_truths)
 
 
-def evaluate(dataset, predictions):
-    f1 = exact_match = total = 0
-    for article in dataset:
-        for paragraph in article['paragraphs']:
-            for qa in paragraph['qas']:
-                total += 1
-                if qa['id'] not in predictions:
-                    message = 'Unanswered question ' + qa['id'] + \
-                              ' will receive score 0.'
-                    print(message, file=sys.stderr)
-                    continue
-                ground_truths = list(map(lambda x: x['text'], qa['answers']))
-                prediction = predictions[qa['id']]
-                exact_match += metric_max_over_ground_truths(
+# def evaluate(dataset, predictions):
+#     f1 = exact_match = total = 0
+#     for article in dataset:
+#         for paragraph in article['paragraphs']:
+#             for qa in paragraph['qas']:
+#                 total += 1
+#                 if qa['id'] not in predictions:
+#                     message = 'Unanswered question ' + qa['id'] + \
+#                               ' will receive score 0.'
+#                     print(message, file=sys.stderr)
+#                     continue
+#                 ground_truths = list(map(lambda x: x['text'], qa['answers']))
+#                 prediction = predictions[qa['id']]
+#                 exact_match += metric_max_over_ground_truths(
+#                     exact_match_score, prediction, ground_truths)
+#                 f1 += metric_max_over_ground_truths(
+#                     f1_score, prediction, ground_truths)
+
+#     exact_match = 100.0 * exact_match / total
+#     f1 = 100.0 * f1 / total
+
+#     return {'exact_match': exact_match, 'f1': f1}
+def get_point(prediction, ground_truths):
+    exact_match += metric_max_over_ground_truths(
                     exact_match_score, prediction, ground_truths)
-                f1 += metric_max_over_ground_truths(
-                    f1_score, prediction, ground_truths)
+    f1 += metric_max_over_ground_truths(
+        f1_score, prediction, ground_truths)
 
     exact_match = 100.0 * exact_match / total
     f1 = 100.0 * f1 / total
-
-    return {'exact_match': exact_match, 'f1': f1}
-
-
+    return exact_match, f1
 if __name__ == '__main__':
-    expected_version = '1.1'
-    parser = argparse.ArgumentParser(
-        description='Evaluation for SQuAD ' + expected_version)
-    parser.add_argument('dataset_file', help='Dataset file')
-    parser.add_argument('prediction_file', help='Prediction File')
-    args = parser.parse_args()
-    with open(args.dataset_file) as dataset_file:
-        dataset_json = json.load(dataset_file)
-        if (dataset_json['version'] != expected_version):
-            print('Evaluation expects v-' + expected_version +
-                  ', but got dataset with v-' + dataset_json['version'],
-                  file=sys.stderr)
-        dataset = dataset_json['data']
-    with open(args.prediction_file) as prediction_file:
-        predictions = json.load(prediction_file)
-    print(json.dumps(evaluate(dataset, predictions)))
+    # expected_version = '1.1'
+    # parser = argparse.ArgumentParser(
+    #     description='Evaluation for SQuAD ' + expected_version)
+    # parser.add_argument('dataset_file', help='Dataset file')
+    # parser.add_argument('prediction_file', help='Prediction File')
+    # args = parser.parse_args()
+    # with open(args.dataset_file) as dataset_file:
+    #     dataset_json = json.load(dataset_file)
+    #     if (dataset_json['version'] != expected_version):
+    #         print('Evaluation expects v-' + expected_version +
+    #               ', but got dataset with v-' + dataset_json['version'],
+    #               file=sys.stderr)
+    #     dataset = dataset_json['data']
+    # with open(args.prediction_file) as prediction_file:
+    #     predictions = json.load(prediction_file)
+    # print(json.dumps(evaluate(dataset, predictions)))
+    path_result = '''/home/zhangs/RC/SQUAD_data/out_first_time/dev_out.txt'''
+    path_dev    = '''/home/zhangs/RC/SQUAD_data/dev-v1.1.json'''
+    dev_data = read_metadata(path_dev)
+    refer_ans = dev_data['answers']
+    passage = dev_data['passages']
+    pred_ans = []
+    with open(path_result, 'r') as result_file:
+        for i,line in enumerate(result_file):
+            pred = line[:line.index('\n')]
+            pred_ans.append(pred)
+    pred_ans = pred_ans[:10570]
+    [exact, f1] = get_point(pred, refer_ans)
