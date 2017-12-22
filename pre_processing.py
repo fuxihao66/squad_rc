@@ -111,44 +111,17 @@ class DataSet:
 
 if __name__ == '__main__':
 
-    # train_ans = []
-    # for i in range(25):
-    #     with open('''/home/zhangs/RC/data/ans_train{}.json'''.format(i), 'r') as ans:
-    #         for line in tqdm(ans):
-    #             instance = json.loads(line)
-    #             train_ans.extend(instance)
+    path_result = '''/home/zhangs/RC/SQUAD_data/out_first_time/dev_out.txt'''
+    path_dev    = '''/home/zhangs/RC/SQUAD_data/dev-v1.1.json'''
+    dev_data = read_metadata(path_dev)
+    refer_ans = dev_data['answers']
+    pred_ans = []
+    with open(path_result, 'r') as result_file:
+        for i,line in enumerate(result_file):
+            pred = line[:line.index('\n')]
+            pred_ans.append(pred)
 
-    # print(len(train_ans))
-    # write_to_file('''/home/zhangs/RC/data/train_answers_non_sent.json''', train_ans)
-    # print(len(dev_ans))
-    # de = []
-    # with open('''/home/zhangs/RC/data/train_answers.json''', 'r') as fi:
-    #     for ins in fi:
-    #         for ins in json.loads(ins):
-    #             if ins[0][1] > 100 or ins[1][1] > 100:
-    #                 de.append(ins)
-    # print(len(de))
-             
-    # train_data_dict = read_metadata('''/home/zhangs/RC/data/train_v1.1.json''', 'train')
-    # train_data = DataSet(train_data_dict)
-    # print('start operating answers')
-    # train_data.operate_answers(25)
-    # print('operating answers successfully')
-    with open('''/home/zhangs/RC/data/train_answers_non_sent.json''') as ans:
-        for line in ans:
-            instance = json.loads(line)
-            for i, y in enumerate(instance):
-                if y[1] > 900:
-                    print(y[1])
-
-
-    # print(len(train_data_dict['passages']))
-    # train_data.write_answers_to_file('''/home/zhangs/RC/data/train_answers.json''')
-    # print('start operating answers')
-    # dev_data.operate_answers(20)
-    # print('operating answers successfully')
-    # dev_data.write_answers_to_file('''/home/zhangs/RC/data/dev_answers.json''')
-
-
+    print(len(pred_ans))
+    print(len(refer_ans))
 
     
