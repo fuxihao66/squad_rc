@@ -113,3 +113,5 @@ if __name__ == '__main__':
             pred_ans.append(pred)
     pred_ans = pred_ans[:10570]
     [exact, f1] = get_point(pred, refer_ans)
+    print(exact)
+    print(f1)
