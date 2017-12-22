@@ -121,7 +121,7 @@ if __name__ == '__main__':
             pred = line[:line.index('\n')]
             pred_ans.append(pred)
 
-    print(len(pred_ans))
-    print(len(refer_ans))
+    # print(len(pred_ans))
+    # print(len(refer_ans))
 
     
