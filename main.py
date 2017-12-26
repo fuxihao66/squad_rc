@@ -129,12 +129,12 @@ def _train(config):
 				print(words)
     
 	print(len(summaries))
-	for summary in summaries:
-		if '\n' in summary:
-			print('fuck you')
+	
 	path_result = '''/home/zhangs/RC/SQUAD_data/out_first_time/dev_out.txt'''
 	with open(path_result, 'w') as out_file:
 		for summary in summaries:
+			if '\n' in summary:
+				summary = summary[:summary.index('\n')]
 			out_file.write(summary+'\n')
 
     
