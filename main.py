@@ -90,10 +90,10 @@ def _train(config):
 				get_summary = True
 				print(global_step)
 
-				if global_step == 5000:
-					trainer.change_lr(0.05)
 				if global_step == 10000:
-					trainer.change_lr(0.01)
+					trainer.change_lr(0.1)
+				if global_step == 20000:
+					trainer.change_lr(0.04)
 
 				loss, summary, train_op = trainer.step(sess, batch, get_summary=get_summary)
 				train_writer.add_summary(summary, global_step)
@@ -130,7 +130,7 @@ def _train(config):
     
 	print(len(summaries))
 	
-	path_result = '''/home/zhangs/RC/SQUAD_data/out_first_time/dev_out.txt'''
+	path_result = '''/home/zhangs/RC/SQUAD_data/out_second_time/dev_out.txt'''
 	with open(path_result, 'w') as out_file:
 		for summary in summaries:
 			if '\n' in summary:

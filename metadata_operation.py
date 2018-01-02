@@ -34,6 +34,8 @@ def read_metadata(file_to_read):
     data_dict['questions'] = query_list
     data_dict['q_id']      = query_id_list
     return data_dict  
+
+
 def renew_data_dict(train_data_dict):
 	indics, bad_indics = get_indics(train_data_dict['passages'],train_data_dict['answers'])
 	renew_passage_list = []
